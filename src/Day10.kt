@@ -1,7 +1,7 @@
-typealias Point10 = Pair<Int, Int>
+typealias IntPoint = Pair<Int, Int>
 
 fun main() {
-    fun pipeDirections(pipe: Char): List<Point10> =
+    fun pipeDirections(pipe: Char): List<IntPoint> =
         when (pipe) {
             '|' -> listOf(Pair(-1, 0), Pair(1, 0))
             '-' -> listOf(Pair(0, -1), Pair(0, 1))
@@ -12,31 +12,31 @@ fun main() {
             else -> emptyList()
         }
 
-    fun add(point: Point10, direction: Point10): Point10 =
+    fun add(point: IntPoint, direction: IntPoint): IntPoint =
         Pair(point.first + direction.first, point.second + direction.second)
 
     fun part1(input: List<String>): Int {
-        val start: Point10 = input.flatMapIndexed { i, row ->
+        val start: IntPoint = input.flatMapIndexed { i, row ->
             val startJ = row.indexOf('S')
             if (startJ != -1) listOf(Pair(i, startJ)) else emptyList()
         }.first()
 
         pipeLoop@ for (startPipe in "|L-J7F") {
-            fun getPipeAt(point: Point10): Char =
+            fun getPipeAt(point: IntPoint): Char =
                 if (point == start) startPipe else input[point.first][point.second]
 
-            fun pointIsInBounds(point: Point10): Boolean =
+            fun pointIsInBounds(point: IntPoint): Boolean =
                 point.first in input.indices && point.second in input[0].indices
 
-            fun adjacentPoints(point: Point10): List<Point10> =
+            fun adjacentPoints(point: IntPoint): List<IntPoint> =
                 pipeDirections(getPipeAt(point)).map { add(point, it) }
 
-            fun pipeIsConnected(point: Point10): Boolean =
+            fun pipeIsConnected(point: IntPoint): Boolean =
                 adjacentPoints(point).all { adjacent ->
                     pointIsInBounds(adjacent) && adjacentPoints(adjacent).contains(point)
                 }
 
-            val visitedPoints = HashSet<Point10>()
+            val visitedPoints = HashSet<IntPoint>()
             var currentPoints = listOf(start)
             var stepN = 0
 
@@ -58,27 +58,27 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        val start: Point10 = input.flatMapIndexed { i, row ->
+        val start: IntPoint = input.flatMapIndexed { i, row ->
             val startJ = row.indexOf('S')
             if (startJ != -1) listOf(Pair(i, startJ)) else emptyList()
         }.first()
 
         pipeLoop@ for (startPipe in "|L-J7F") {
-            fun getPipeAt(point: Point10): Char =
+            fun getPipeAt(point: IntPoint): Char =
                 if (point == start) startPipe else input[point.first][point.second]
 
-            fun pointIsInBounds(point: Point10): Boolean =
+            fun pointIsInBounds(point: IntPoint): Boolean =
                 point.first in input.indices && point.second in input[0].indices
 
-            fun adjacentPoints(point: Point10): List<Point10> =
+            fun adjacentPoints(point: IntPoint): List<IntPoint> =
                 pipeDirections(getPipeAt(point)).map { add(point, it) }
 
-            fun pipeIsConnected(point: Point10): Boolean =
+            fun pipeIsConnected(point: IntPoint): Boolean =
                 adjacentPoints(point).all { adjacent ->
                     pointIsInBounds(adjacent) && adjacentPoints(adjacent).contains(point)
                 }
 
-            val visitedPoints = HashSet<Point10>()
+            val visitedPoints = HashSet<IntPoint>()
             var currentPoints = listOf(start)
             var stepN = 0
 
@@ -95,12 +95,12 @@ fun main() {
                 ++stepN
             }
 
-            val visited2 = HashSet<Point10>()
+            val visited2 = HashSet<IntPoint>()
             for (i in 1..<input.size) {
                 var fl = false
                 for (j in input[i].indices) {
-                    val a = Point10(i - 1, j)
-                    val b = Point10(i, j)
+                    val a = IntPoint(i - 1, j)
+                    val b = IntPoint(i, j)
                     fun visit() {
                         visited2.add(a)
                         visited2.add(b)
