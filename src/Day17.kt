@@ -14,16 +14,24 @@ fun oppositeDirection(direction: Direction): Direction {
 }
 
 fun main() {
+//    fun moveOnGridN(grid: List<String>, point: IntPoint, direction: Direction, n: Int): IntPoint? {
+//        return (1..n).fold<Int, IntPoint?>(point) { currentPoint, _ ->
+//            currentPoint?.let { moveOnGrid(grid, it, direction) }
+//        }
+//    }
+
     fun moveOnGridN(grid: List<String>, point: IntPoint, direction: Direction, n: Int): IntPoint? {
-        return (1..n).fold<Int, IntPoint?>(point) { currentPoint, _ ->
-            currentPoint?.let { moveOnGrid(grid, it, direction) }
-        }
+        val newPoint = IntPoint(point.first + direction.dx * n, point.second + direction.dy * n)
+        return if (newPoint.first in grid[0].indices && newPoint.second in grid.indices)
+            newPoint
+        else
+            null
     }
 
     fun part1(grid: List<String>): Long {
         val visited = HashSet<Node17>()
         val distance = HashMap<Node17, Long>()
-        val from = HashMap<Node17, Node17>()
+//        val from = HashMap<Node17, Node17>()
         val allDistances = TreeSet(
             compareBy<Pair<Long, Node17>> { it.first }
                 .thenBy { it.second.first.first }
@@ -61,7 +69,7 @@ fun main() {
                             }
                             if (newNodeDistance == null || possibleNewDistance < newNodeDistance) {
                                 distance[newNode] = possibleNewDistance
-                                from[newNode] = currentNode
+//                                from[newNode] = currentNode
                             }
                             allDistances.add(Pair(distance[newNode]!!, newNode))
                         }
@@ -75,7 +83,7 @@ fun main() {
     fun part2(grid: List<String>): Long {
         val visited = HashSet<Node17>()
         val distance = HashMap<Node17, Long>()
-        val from = HashMap<Node17, Node17>()
+//        val from = HashMap<Node17, Node17>()
         val allDistances = TreeSet(
             compareBy<Pair<Long, Node17>> { it.first }
                 .thenBy { it.second.first.first }
@@ -101,7 +109,10 @@ fun main() {
                 if (direction != currentNode.second && direction != oppositeDirection(currentNode.second)) {
                     for (stepN in 4..10) {
                         val newPoint = moveOnGridN(grid, currentNode.first, direction, stepN)
-                        if (newPoint != null && !visited.contains(Node17(newPoint, direction))) {
+                        if (newPoint == null) {
+                            break
+                        }
+                        if (!visited.contains(Node17(newPoint, direction))) {
                             val newNode = Node17(newPoint, direction)
                             val possibleNewDistance = currentDistance + (1..stepN).sumOf {
                                 val pointInTheMiddle = moveOnGridN(grid, currentNode.first, direction, it)!!
@@ -113,7 +124,7 @@ fun main() {
                             }
                             if (newNodeDistance == null || possibleNewDistance < newNodeDistance) {
                                 distance[newNode] = possibleNewDistance
-                                from[newNode] = currentNode
+//                                from[newNode] = currentNode
                             }
                             allDistances.add(Pair(distance[newNode]!!, newNode))
                         }
@@ -129,6 +140,9 @@ fun main() {
     check(part2(testInput) == 94L)
 
     val input = readInput("Day17")
+    println(System.currentTimeMillis())
     part1(input).println()
+    println(System.currentTimeMillis())
     part2(input).println()
+    println(System.currentTimeMillis())
 }
