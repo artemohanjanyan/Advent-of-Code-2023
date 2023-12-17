@@ -7,19 +7,19 @@ enum class Direction(val dx: Int, val dy: Int) {
     Right(1, 0)
 }
 
+fun moveOnGrid(grid: List<String>, point: IntPoint, direction: Direction): IntPoint? {
+    val newPoint = IntPoint(point.first + direction.dx, point.second + direction.dy)
+    return if (newPoint.first in grid[0].indices && newPoint.second in grid.indices)
+        newPoint
+    else
+        null
+}
+
+fun getGridChar(grid: List<String>, point: IntPoint): Char {
+    return grid[point.second][point.first]
+}
+
 fun main() {
-    fun move(grid: List<String>, point: IntPoint, direction: Direction): IntPoint? {
-        val newPoint = IntPoint(point.first + direction.dx, point.second + direction.dy)
-        return if (newPoint.first in grid[0].indices && newPoint.second in grid.indices)
-            newPoint
-        else
-            null
-    }
-
-    fun getChar(grid: List<String>, point: IntPoint): Char {
-        return grid[point.second][point.first]
-    }
-
     fun energizedCount(grid: List<String>, startingPoint: IntPoint, startingDirection: Direction): Long {
         val visited = HashSet<IntPoint>().apply { add(startingPoint) }
         val visitedWithDirections = HashSet<Pair<IntPoint, Direction>>().apply { add(Pair(startingPoint, startingDirection)) }
@@ -27,14 +27,14 @@ fun main() {
         while (lightQueue.isNotEmpty()) {
             val (point, direction) = lightQueue.removeFirst()
             fun addNextPoint(direction: Direction) {
-                val newPoint = move(grid, point, direction)
+                val newPoint = moveOnGrid(grid, point, direction)
                 if (newPoint != null && !visitedWithDirections.contains(Pair(newPoint, direction))) {
                     visited.add(newPoint)
                     visitedWithDirections.add(Pair(newPoint, direction))
                     lightQueue.add(Pair(newPoint, direction))
                 }
             }
-            when (getChar(grid, point)) {
+            when (getGridChar(grid, point)) {
                 '.' -> addNextPoint(direction)
                 '/' ->
                     addNextPoint(when(direction) {
