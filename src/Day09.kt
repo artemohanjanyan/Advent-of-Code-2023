@@ -1,11 +1,11 @@
-typealias Line = List<Long>
+typealias Line9 = List<Long>
 
 fun main() {
-    fun readLine(line: String): Line {
+    fun readLine(line: String): Line9 {
         return line.split(' ').map { it.toLong() }
     }
 
-    fun makePascal(input: List<Line>): Array<LongArray> {
+    fun makePascal(input: List<Line9>): Array<LongArray> {
         val maxLength = input.maxOf { it.size } + 1
         val pascal = Array(maxLength) { LongArray(maxLength) }
         for (i in 0..<maxLength) {
@@ -18,7 +18,7 @@ fun main() {
         return pascal
     }
 
-    fun findStepN(line: Line): Int {
+    fun findStepN(line: Line9): Int {
         var currentLine = line
         var stepN = 0
         while (!currentLine.all { it == 0L }) {
@@ -28,7 +28,7 @@ fun main() {
         return stepN
     }
 
-    fun part1(input: List<Line>): Long {
+    fun part1(input: List<Line9>): Long {
         val pascal = makePascal(input)
         return input.sumOf { line ->
             val stepN = findStepN(line)
@@ -40,7 +40,7 @@ fun main() {
         }
     }
 
-    fun part2(input: List<Line>): Long {
+    fun part2(input: List<Line9>): Long {
         val pascal = makePascal(input)
         return input.sumOf { line ->
             val stepN = findStepN(line)
