@@ -1,0 +1,20 @@
+I visualised the graph using graphviz,
+then tweaked some parameters (removed edges, set node size to the minimum),
+exported the image as svg,
+manually further reduced point thickness in svg,
+opened the image in GIMP,
+selected x=2300 coordinate that splits graph into two parts,
+saved as PNG,
+opened it in gnu octave,
+calculated the proportion of non-white pixels to the left of 2300
+to find the number of nodes on the left.
+
+Octave code:
+
+img = imread("path to png");
+left=img(:,1:2300,:);
+q1=nnz(255-left);
+q=nnz(255-img);
+leftNumber=round(totalNumber*q1/q);
+rightNumber=totalNumber-leftNumber;
+leftNumber*rightNumber
